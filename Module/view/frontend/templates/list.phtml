@@ -1,0 +1,31 @@
+<?php
+    $dictionary = array(
+        0 => 'How do i find my order',
+        1 => 'How does buying work',
+        2 => 'How many fees are there',
+        3 => 'How do sign out',
+        4 => 'How do i message',
+        5 => 'How do i refund items'
+    );
+?>
+<div>
+    <h3>FAQ</h3>
+    <input class="search-box" type="text" name="" id="" placeholder="Search FAQ">
+    <div class="list">
+        <ul style="list-style-type: none; padding: 0;">
+            <?php
+                $i=0;
+                $limit = $block->getList();
+                $count = 0;
+
+                foreach ($dictionary as $key => $value) {
+                    if ($count >= $limit) {
+                        break;
+                    }
+
+                    ?>
+                    <li style="list-style-type: none; margin-bottom: 10px; padding: 5px; background-color: #f5f5f5;"><?php echo $value; ?></li>
+            <?php $count++; } ?>
+        </ul>
+    </div>
+</div>

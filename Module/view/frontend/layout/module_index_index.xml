@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <referenceContainer name="div.sidebar.main">
+        <block class="Advanced\Module\Block\Display" name="text_left" template="Advanced_Module::help.phtml" ifconfig="advanced/general/enable" />
+        <referenceContainer name="div.sidebar.additional" remove="true"/>
+    </referenceContainer>
+    <referenceContainer name="content">
+            <block class="Advanced\Module\Block\Display" name="title" template="Advanced_Module::title.phtml" />
+            <container name="div.container" htmlTag="div" htmlClass="container_main" htmlId="container">
+                <block class="Advanced\Module\Block\Display" name="text_center" template="Advanced_Module::list.phtml" />
+            </container>
+    </referenceContainer>
+</page>
