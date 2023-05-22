@@ -1,0 +1,29 @@
+<form method="post" action="actions?act=do_edit">
+    <?php $id = isset($_GET["id"]) ? $_GET["id"] : "";
+        foreach ($block->getCollectionById($id) as $key => $item) {?>
+            <input type="text" name="idedit" placeholder="id" value="<?php echo $item->getId(); ?>" />
+            <input type="text" name="column1" placeholder="column1" value="<?php echo $item->getData('column1') ?>"/>
+    <?php } ?>
+    <button type="submit">SAVE</button>
+</form>
+<style>
+    form {
+        margin-top: 20px;
+    }
+    
+    input[type="text"] {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    
+    button[type="submit"] {
+        padding: 8px 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>

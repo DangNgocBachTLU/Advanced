@@ -1,0 +1,11 @@
+{
+    "demo_db_schema": {
+        "column": {
+            "id": true,
+            "column1": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
