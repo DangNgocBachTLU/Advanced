@@ -1,0 +1,8 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="customer_login">
+        <observer name="advanced_module_validate_customer_login" instance="Advanced\Module\Observer\CustomerLoginObserver" />
+    </event>
+    <event name="customer_register_success">
+        <observer name="advanced_module_validate_customer_register" instance="Advanced\Module\Observer\CustomerRegisterObserver" />
+    </event>
+</config>
