@@ -1,0 +1,13 @@
+{
+    "tbEmployee": {
+        "column": {
+            "id": true,
+            "name": true,
+            "age": true,
+            "job": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

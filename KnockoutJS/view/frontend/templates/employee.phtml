@@ -1,0 +1,198 @@
+<div id="employee-management">
+    <h1>Employee Management</h1>
+
+    <div>
+        <label>Select Employee:</label>
+        <select data-bind="options: employees, optionsText: 'name', value: selectedEmployee"></select>
+        <div data-bind="if: selectedEmployee">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Job</th>
+                </tr>
+                <tr>
+                    <td><span data-bind="text: selectedEmployee().name"></span></td>
+                    <td><span data-bind="text: selectedEmployee().age"></span></td>
+                    <td><span data-bind="text: selectedEmployee().job"></span></td>
+                    <td><button data-bind="click: $root.deleteEmployee.bind($data, selectedEmployee())">Delete</button></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <button data-bind="click: showAddEmployeeForm">Add Employee</button>
+        <div data-bind="visible: showForm">
+            <h2>Add Employee</h2>
+            <form data-bind="submit: addEmployee">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Job</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" data-bind="value: newEmployee.name" required></td>
+                        <td><input type="number" data-bind="value: newEmployee.age" required></td>
+                        <td><input type="text" data-bind="value: newEmployee.job" required></td>
+                        <td><button type="submit">Submit</button></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'ko',
+        'Magento_Ui/js/modal/modal'
+    ], function($, ko, modal) {
+        var employeeData = <?= $block->getEmployeeData() ?>;
+
+        function Employee(id, name, age, job) {
+            this.id = id;
+            this.name = name;
+            this.age = age;
+            this.job = job;
+        }
+
+        function EmployeeViewModel() {
+            var self = this;
+
+            self.employees = ko.observableArray(employeeData);
+            self.selectedEmployee = ko.observable();
+            self.showForm = ko.observable(false);
+            self.newEmployee = {
+                name: ko.observable(),
+                age: ko.observable(),
+                job: ko.observable()
+            };
+
+            self.showAddEmployeeForm = function() {
+                self.showForm(true);
+            };
+
+            self.addEmployee = function() {
+                var name = self.newEmployee.name();
+                var age = self.newEmployee.age();
+                var job = self.newEmployee.job();
+
+                $.ajax({
+                    url: '/knockoutjs/index/save',
+                    method: 'POST',
+                    data: {
+                        name: name,
+                        age: age,
+                        job: job
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            var newEmployee = new Employee(response.id, name, age, job);
+                            self.employees.push(newEmployee);
+                        }
+
+                        self.newEmployee.name('');
+                        self.newEmployee.age('');
+                        self.newEmployee.job('');
+
+                        self.showForm(false);
+                    }
+                });
+            };
+
+            self.deleteEmployee = function(employee) {
+                if (confirm('Are you sure you want to delete this employee?')) {
+                    $.ajax({
+                        url: '/knockoutjs/index/delete',
+                        method: 'POST',
+                        data: {
+                            id: employee.id
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                self.employees.remove(employee);
+                            }
+                        }
+                    });
+                }
+            };
+        }
+
+        var employeeViewModel = new EmployeeViewModel();
+        ko.applyBindings(employeeViewModel, document.getElementById('employee-management'));
+    });
+</script>
+
+<style>
+    /* CSS for Employee Management section */
+    #employee-management {
+        width: 500px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* CSS for Add Employee form */
+    form {
+        margin-top: 10px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 6px 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+        padding: 6px 12px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    /* CSS for Employee List */
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+
+    button[data-bind^="click:"] {
+        padding: 6px 12px;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
