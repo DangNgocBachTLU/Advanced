@@ -1,0 +1,96 @@
+<?php
+$items = $block->getCartItems();
+$count = 0;
+foreach ($items as $item) {
+    if ($block->getProductsData($item->getProductId())) {
+        $count++;
+    }
+}
+?>
+
+<div id="customModal" style="display: none;">
+    <div id="minicart-content-wrapper">
+        <div class="content-wrapper">
+            <?php if ($count > 0) : ?>
+                <div>
+                    <h3>Maybe you will like this product. Do you want to add it to your cart?</h3>
+                    <br>
+                    <div class="cartProductList" id="cartProductList" style="display: flex; justify-content:space-around; flex-wrap: wrap;">
+                        <?php foreach ($items as $item) : 
+                            if ($block->getProductsData($item->getProductId())) {
+                                $suggestProductId = $block->getProductsData($item->getProductId());
+                            } else 
+                                $suggestProductId = '';
+
+                            if ($suggestProductId != '') {
+                                $suggestProduct = $block->getProductById($suggestProductId);
+                                $addToCartUrl =  $block->AddToCart($suggestProduct);
+                                $image = $suggestProduct->getSmallImage() == '' ? '/pub/static/frontend/Magento/luma/en_US/Magento_Catalog/images/category/placeholder/image.jpg' : '/pub/media/catalog/product' . $suggestProduct->getSmallImage();
+                                $name = $suggestProduct->getName();
+                                $price = $suggestProduct->getPrice();
+                        ?>
+                                <div class="product-box" style="display: flex; gap: 24px; flex-direction: row; align-items: center;">
+                                    <img width="150px" height="150px" src="<?php echo $image; ?>" style="flex: 0 0 auto;">
+                                    <div style="flex: 1;">
+                                        <p style="max-width: 200px; font-weight: bold;"><?php echo $name; ?></p>
+                                        <p class="price" style="margin-top: 10px;">$<?php echo $price; ?></p>
+                                        <form data-role="form" action="<?php echo $addToCartUrl; ?>" method="post" id="form" style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                                            <?php echo $block->getBlockHtml('formkey') ?>
+                                            <button type="submit" title="Agree" class="action agree primary" style="margin-right: 10px;">
+                                                <span>Agree</span>
+                                            </button>
+                                            <button type="submit" title="Disagree" class="action disagree primary">
+                                                <span>Disagree</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php else : ?>
+                <div>Are you sure would like to go to checkout page?</div>
+                <button type="submit" title="OK" class="action ok primary" style="margin-right: 10px;">
+                    <span>OK</span>
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/modal'
+    ], function($, modal) {
+        $(document).ready(function() {
+            $('.agree').on("click", function(event) {
+                event.preventDefault();
+                var addToCartUrl = $(this).closest('form').attr('action');
+                var checkoutUrl = '<?php echo $block->escapeUrl($block->getCheckoutUrl()) ?>';
+
+                $.ajax({
+                    url: addToCartUrl,
+                    method: 'POST',
+                    dataType: 'json',
+                    data: $(this).closest('form').serialize(),
+                    success: function(response) {
+                        window.location.href = checkoutUrl;
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+            $('.disagree').on("click", function(event) {
+                event.preventDefault();
+                window.location.href = '<?php echo $block->escapeUrl($block->getCheckoutUrl()) ?>';
+            });
+            $('.ok').on("click", function(event) {
+                event.preventDefault();
+                window.location.href = '<?php echo $block->escapeUrl($block->getCheckoutUrl()) ?>';
+            });
+        });
+    });
+</script>

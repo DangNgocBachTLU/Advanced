@@ -1,0 +1,7 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="minicart.addons">
+            <block class="Advanced\Suggested\Block\Products" name="custom.block" template="Advanced_Suggested::proceed-to-checkout.phtml" cacheable="false"/>
+        </referenceContainer>
+    </body>
+</page>

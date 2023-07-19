@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+            <add id="Advanced_Suggested::menu_title" title="Advanced Module" module="Advanced_Suggested" sortOrder="20" resource="Advanced_Suggested::menu_title" />
+            <add id="Advanced_Suggested::product" title="Suggested Product" module="Advanced_Suggested" sortOrder="10" parent="Advanced_Suggested::menu_title" action="advanced_suggested/product" resource="Advanced_Suggested::product"/>
+            <!-- <add id="Advanced_Suggested::module_config" title="Module Configuration" module="Advanced_Suggested" sortOrder="2" parent="Advanced_Suggested::menu_title" action="adminhtml/system_config/edit/section/helloworld" resource="Advanced_Suggested::configuration"/> -->
+    </menu>
+</config>
